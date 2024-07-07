@@ -32,8 +32,8 @@ Ensure you have the following installed on your system:
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/bookstore-app.git
-    cd bookstore-app
+    git clone https://github.com/Alimurtaza330/bookStore.git
+    cd bookStore
     ```
 
 2. **Backend Setup**:
