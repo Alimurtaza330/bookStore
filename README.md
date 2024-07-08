@@ -8,6 +8,7 @@ Welcome to the Bookstore App! This is a full-stack web application where users c
 
 - **User Authentication**: Sign up, log in, and log out functionality.
 - **Email Verification**: Users must verify their email before accessing certain features.
+- **Forget reset password**: Allow user to change password if he forget it or want a new one
 - **Responsive Design**: A user-friendly interface accessible on various devices.
 
 ## Technologies Used
@@ -77,8 +78,9 @@ Ensure you have the following installed on your system:
 
 1. **Sign Up**: Create a new account by providing a username, email, and password.
 2. **Email Verification**: Check your email for a verification link and verify your email address.
-3. **Log In**: Log in using your email and password.
-4. **Courses**: Access and manage courses in the Courses section.
+3. **Forget Reset Password**: Allow user to change password incase he forget old one or want a new.
+4. **Log In**: Log in using your email and password.
+5. **Courses**: Access and manage courses in the Courses section.
 
 ### Routes
 
@@ -87,14 +89,16 @@ Ensure you have the following installed on your system:
 - **Contact Us**: `/contact`
 - **About Us**: `/about`
 - **Sign Up**: `/signup`
-- **Forget Password**: `/forget`
+- **Forget Password**: `/forgot-password`
+-  **Reset Password**: `/reset-password`
 
 ### API Endpoints
 
 - **Sign Up**: `POST /signup`
 - **Log In**: `POST /login`
 - **Verify Email**: `GET /verify`
-- **Forget Password**: `POST /forget_password`
+- **Forget Password**: `POST /user/forgot-password`
+- **Reset Password**: `POST /user/reset-password`
 
 ## Contributing
 
