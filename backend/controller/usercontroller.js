@@ -2,14 +2,14 @@ import User from "../model/userScheme.js";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import dotenv from 'dotenv';
-import randomString from "randomstring";
+import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const Port = process.env.GMAIL_PORT;
 const gmail = process.env.GMAIL;
 const gmailPassword = process.env.GMAIL_PASSWORD;
 const gmailHost = process.env.HOST;
-
+const secretKey=process.env.JWTSECRETKEY
 
 // Verify email
 
@@ -50,6 +50,68 @@ export const verifyYourMail = async (req, res) => {
     }
 };
 
+
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ message: "User with this email does not exist" });
+        }
+        
+        if (!user.is_verified) {
+            return res.status(400).json({ message: "Email is not verified" });
+        }
+
+        const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '1d' });
+
+        const transporter = nodemailer.createTransport({
+            host: gmailHost,
+            port: Port,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: gmail,
+                pass: gmailPassword
+            }
+        });
+
+        const mailOptions = {
+            from: gmail,
+            to: email,
+            subject: "Password Reset",
+            html: `<p>Hi ${user.username},</p><p>Please use the following link to reset your password:</p><a href="http://localhost:8001/user/reset-password?token=${token}">Reset Password</a>`
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: "Password reset link has been sent to your email" });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
+// Reset Password
+export const resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        if (!token) {
+            return res.status(400).json({ message: "Invalid or expired token" });
+        }
+
+        const decoded = jwt.verify(token, secretKey);
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await User.updateOne({ _id: decoded._id }, { $set: { password: hashedPassword } });
+
+        res.status(200).json({ message: "Password has been reset successfully" });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 
 // Sign Up 
 export const signup = async (req, res) => {

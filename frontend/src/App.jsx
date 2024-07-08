@@ -6,6 +6,8 @@ import Home from "./Course/Home"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Toaster } from 'react-hot-toast';
 import { useAuth } from "./context/authProvider"
+import ForgotPassword from "./component/ForgetPassword"
+import ResetPassword from "./component/ResetPassword"
 
 const App = () => {
   const [authUser, setAuthUser] = useAuth();
@@ -18,7 +20,8 @@ const App = () => {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/signup" element={<Signup />} />
-        
+        <Route path="/forgot-password" element={<ForgotPassword/>} />
+        <Route path="/reset-password" element={<ResetPassword/>} />
       </Routes>
       <Toaster />
     </>
